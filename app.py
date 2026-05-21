@@ -1,28 +1,35 @@
 import streamlit as st
 import google.generativeai as genai
-import os
 import PyPDF2 as pdf
-from dotenv import load_dotenv
 import json
 import re
 
-load_dotenv()
+st.set_page_config(
+    page_title="AI ATS System",
+    layout="centered"
+)
 
-api_key = st.secrets["GOOGLE_API_KEY"]
+# ---------------- API KEY ----------------
 
-if not api_key:
-    st.error("GOOGLE_API_KEY not found")
+try:
+    api_key = st.secrets["GOOGLE_API_KEY"]
+    genai.configure(api_key=api_key)
+
+except Exception:
+    st.error("GOOGLE_API_KEY not found in Streamlit Secrets")
     st.stop()
 
-genai.configure(api_key=api_key)
+# ---------------- MODELS ----------------
 
 MODELS = {
     "pro": "gemini-2.5-flash",
     "flash": "gemini-2.5-flash"
 }
 
+# ---------------- GEMINI RESPONSE ----------------
 
 def get_gemini_response(prompt, model_choice="pro"):
+
     try:
         model_name = MODELS.get(model_choice, "gemini-2.5-flash")
 
@@ -37,20 +44,26 @@ def get_gemini_response(prompt, model_choice="pro"):
 
         response = model.generate_content(prompt)
 
-        return response.text.strip() if response and response.text else ""
+        if response and response.text:
+            return response.text.strip()
+
+        return ""
 
     except Exception as e:
-        error_str = str(e).lower()
 
-        if "429" in error_str or "quota" in error_str:
-            st.error("Quota limit exceeded")
+        error_message = str(e)
+
+        if "429" in error_message.lower():
+            st.error("Quota limit exceeded. Try again later.")
         else:
-            st.error(f"Model Error: {str(e)}")
+            st.error(f"Model Error: {error_message}")
 
         return None
 
+# ---------------- PDF EXTRACTION ----------------
 
 def input_pdf_text(uploaded_file):
+
     try:
         reader = pdf.PdfReader(uploaded_file)
 
@@ -67,13 +80,17 @@ def input_pdf_text(uploaded_file):
     except Exception as e:
         return f"PDF_ERROR: {str(e)}"
 
+# ---------------- PROMPT ----------------
 
 input_prompt = """
-You are an expert ATS (Application Tracking System) reviewer.
+You are an expert ATS (Applicant Tracking System) reviewer.
 
-Analyze the resume against the job description carefully.
+Analyze the resume against the job description.
 
 Return ONLY valid JSON.
+
+Do not use markdown.
+Do not use ```json.
 
 {
   "JD Match": "85%",
@@ -90,38 +107,47 @@ Job Description:
 {jd}
 """
 
+# ---------------- JSON EXTRACTION ----------------
 
 def safe_extract_json(response_text):
+
     if not response_text:
         return None
 
     try:
-        return json.loads(response_text)
 
-    except:
-        try:
-            match = re.search(r'\{.*\}', response_text, re.DOTALL)
+        cleaned = response_text.strip()
 
-            if match:
-                cleaned = match.group(0)
+        cleaned = cleaned.replace("```json", "")
+        cleaned = cleaned.replace("```", "")
 
-                cleaned = re.sub(r',\s*}', '}', cleaned)
-                cleaned = re.sub(r',\s*\]', ']', cleaned)
+        start = cleaned.find("{")
+        end = cleaned.rfind("}") + 1
 
-                return json.loads(cleaned)
+        if start != -1 and end != -1:
 
-        except:
-            pass
+            json_text = cleaned[start:end]
+
+            json_text = re.sub(r",\s*}", "}", json_text)
+            json_text = re.sub(r",\s*\]", "]", json_text)
+
+            return json.loads(json_text)
+
+    except Exception:
+        return None
 
     return None
 
-
-st.set_page_config(page_title="AI ATS System", layout="centered")
+# ---------------- UI ----------------
 
 st.title("AI ATS SYSTEM")
-st.caption("Gemini Powered Resume Analyzer")
 
-jd = st.text_area("Paste Job Description", height=220)
+st.caption("Gemini Powered Resume ATS Analyzer")
+
+jd = st.text_area(
+    "Paste Job Description",
+    height=220
+)
 
 uploaded_file = st.file_uploader(
     "Upload Resume (PDF)",
@@ -134,8 +160,12 @@ model_choice = st.radio(
     format_func=lambda x: "Gemini 2.5 Flash"
 )
 
-submit = st.button("Analyze Resume", type="primary")
+submit = st.button(
+    "Analyze Resume",
+    type="primary"
+)
 
+# ---------------- MAIN LOGIC ----------------
 
 if submit:
 
@@ -156,9 +186,11 @@ if submit:
                 st.stop()
 
             final_prompt = input_prompt.replace(
-                "{resume}", text
+                "{resume}",
+                text
             ).replace(
-                "{jd}", jd
+                "{jd}",
+                jd
             )
 
             response_text = get_gemini_response(
@@ -174,6 +206,8 @@ if submit:
 
                 if result:
 
+                    st.success("Analysis Completed")
+
                     st.json(result)
 
                     with st.expander("Raw Response"):
@@ -181,10 +215,20 @@ if submit:
 
                 else:
 
-                    st.error("Invalid JSON format")
+                    st.warning("Could not parse JSON correctly")
+
+                    cleaned_response = response_text.replace(
+                        "```json",
+                        ""
+                    ).replace(
+                        "```",
+                        ""
+                    )
 
                     st.text_area(
-                        "Raw Output",
-                        response_text,
+                        "Model Output",
+                        cleaned_response,
                         height=400
                     )
+
+                    
