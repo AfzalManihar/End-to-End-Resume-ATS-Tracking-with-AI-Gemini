@@ -17,7 +17,7 @@ if not api_key:
 genai.configure(api_key=api_key)
 
 # ---------------- MODELS (Fixed for Free Tier) ----------------
-# Pro model free tier mein quota khatam ho chuka hai, isliye Flash use kar rahe hain
+
 MODELS = {
     "pro": "gemini-2.5-flash",      # Best working model right now
     "flash": "gemini-2.5-flash"
