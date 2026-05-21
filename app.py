@@ -8,7 +8,7 @@ import re
 
 load_dotenv()
 
-api_key = os.getenv("GOOGLE_API_KEY")
+api_key = st.secrets["GOOGLE_API_KEY"]
 
 if not api_key:
     st.error("GOOGLE_API_KEY not found")
