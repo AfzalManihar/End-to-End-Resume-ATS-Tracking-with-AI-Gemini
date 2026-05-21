@@ -18,9 +18,12 @@ It demonstrates a complete AI workflow:
 
 👉 Streamlit App: https://end-to-end-resume-ats-tracking-with-ai-gemini-1.streamlit.app/ 
 
-
 📌 Upload resume and job description to get instant ATS analysis in real-time.
 
+---
+## 📸 Application Screenshot
+
+![ATS System Output](https://github.com/AfzalManihar/End-to-End-Resume-ATS-Tracking-with-AI-Gemini/blob/main/Output.png)
 ---
 ## Project Structure 
 resume-ats-ai/
