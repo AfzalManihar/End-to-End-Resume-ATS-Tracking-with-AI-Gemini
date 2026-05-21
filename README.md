@@ -89,43 +89,33 @@ In today’s competitive job market:
 
 ---
 
-## 🚀 How to Run This Project Locally
+# 🚀 How to Run This Project Locally
+
+## Step 1: Clone Repository
 
 ```bash
-# Step 1: Clone repository
 git clone https://github.com/your-username/resume-ats-ai.git
-
-# Step 2: Move into project folder
-cd resume-ats-ai
-
-# Step 3: Create virtual environment
-python -m venv venv
-venv\Scripts\activate   # Windows
-
-# Step 4: Install dependencies
-pip install -r requirements.txt
-
-# Step 5: Add API Key in .env file
-GOOGLE_API_KEY=your_api_key_here
-
-# Step 6: Run Streamlit app
-streamlit run app.py
+```
 
 ---
 
-# 🚀 STEPS to Create Project
+## Step 2: Move into Project Folder
 
-# ⚙️ Environment Setup
+```bash
+cd resume-ats-ai
+```
 
-## Create Conda Environment
+---
+
+## Step 3: Create Virtual Environment
+
+### Using Conda
 
 ```bash
 conda create -p atsenv python==3.10 -y
 ```
 
----
-
-## Activate Environment
+Activate Environment:
 
 ```bash
 conda activate atsenv/
@@ -133,9 +123,32 @@ conda activate atsenv/
 
 ---
 
-## Create `requirements.txt`
+### OR Using venv
+
+```bash
+python -m venv venv
+```
+
+Activate Environment (Windows):
+
+```bash
+venv\Scripts\activate
+```
+
+---
+
+## Step 4: Create `requirements.txt`
 
 Add important libraries and frameworks inside `requirements.txt`
+
+Example:
+
+```txt
+streamlit
+google-generativeai
+python-dotenv
+PyPDF2
+```
 
 Install dependencies:
 
@@ -147,7 +160,7 @@ pip install -r requirements.txt
 
 # 🔐 Create `.env` File
 
-Create a `.env` file inside project folder to store API key securely.
+Create a `.env` file inside the project folder to securely store API key.
 
 ```env
 GOOGLE_API_KEY='YOUR_API_KEY'
@@ -158,7 +171,7 @@ GOOGLE_API_KEY='YOUR_API_KEY'
 # 🔑 Generate Gemini API Key
 
 - Open Browser
-- Search: **Makersuite**
+- Search: **Makersuite / Google AI Studio**
 - Sign Up
 - Click **Create API Key**
 - Copy API Key
