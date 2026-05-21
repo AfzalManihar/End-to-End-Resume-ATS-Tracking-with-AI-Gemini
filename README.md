@@ -111,3 +111,105 @@ GOOGLE_API_KEY=your_api_key_here
 # Step 6: Run Streamlit app
 streamlit run app.py
 
+---
+
+# 🚀 STEPS to Create Project
+
+# ⚙️ Environment Setup
+
+## Create Conda Environment
+
+```bash
+conda create -p atsenv python==3.10 -y
+```
+
+---
+
+## Activate Environment
+
+```bash
+conda activate atsenv/
+```
+
+---
+
+## Create `requirements.txt`
+
+Add important libraries and frameworks inside `requirements.txt`
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+# 🔐 Create `.env` File
+
+Create a `.env` file inside project folder to store API key securely.
+
+```env
+GOOGLE_API_KEY='YOUR_API_KEY'
+```
+
+---
+
+# 🔑 Generate Gemini API Key
+
+- Open Browser
+- Search: **Makersuite**
+- Sign Up
+- Click **Create API Key**
+- Copy API Key
+- Paste inside `.env`
+
+---
+
+# 🌐 Workflow of Website
+
+```text
+Setup Poppler
+      ↓
+API Integration
+      ↓
+PDF to Text Extraction (PyPDF2)
+      ↓
+Pass Text to Gemini API
+      ↓
+Return ATS Response
+```
+
+---
+
+# 🖥️ Create `app.py`
+
+## Main Functionalities
+
+- Import all required libraries
+- Create `get_gemini_response()` function
+- Create `input_pdf_text()` function
+- Create `prompt_input` template
+- Build basic Streamlit UI
+
+---
+
+# ▶️ Run the Application
+
+Open CMD / Terminal
+
+Go to project folder where `app.py` exists.
+
+Run:
+
+```bash
+streamlit run app.py
+```
+
+---
+
+# 🌐 Open in Browser
+
+```text
+http://localhost:8501
+```
