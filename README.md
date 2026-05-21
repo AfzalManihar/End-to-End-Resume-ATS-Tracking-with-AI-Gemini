@@ -16,8 +16,8 @@ It demonstrates a complete AI workflow:
 
 ## 🌐 Live Demo
 
-👉 Streamlit App: *(Add your deployed link here)*  
-Example: https://your-app-name.streamlit.app/
+👉 Streamlit App: https://end-to-end-resume-ats-tracking-with-ai-gemini-1.streamlit.app/ 
+
 
 📌 Upload resume and job description to get instant ATS analysis in real-time.
 
@@ -94,7 +94,7 @@ In today’s competitive job market:
 ## Step 1: Clone Repository
 
 ```bash
-git clone https://github.com/your-username/resume-ats-ai.git
+git clone https://github.com/AfzalManihar/End-to-End-Resume-ATS-Tracking-with-AI-Gemini.git
 ```
 
 ---
@@ -102,7 +102,7 @@ git clone https://github.com/your-username/resume-ats-ai.git
 ## Step 2: Move into Project Folder
 
 ```bash
-cd resume-ats-ai
+End-to-End-Resume-ATS-Tracking-with-AI-Gemini
 ```
 
 ---
